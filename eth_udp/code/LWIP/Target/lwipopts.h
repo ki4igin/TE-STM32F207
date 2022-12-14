@@ -1,22 +1,21 @@
 
 /**
-  ******************************************************************************
-  * File Name          : Target/lwipopts.h
-  * Description        : This file overrides LwIP stack default configuration
-  *                      done in opt.h file.
-  ******************************************************************************
-  * @attention
-  *
-  * Copyright (c) 2022 STMicroelectronics.
-  * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
-  *
-  ******************************************************************************
-  */
-
+ ******************************************************************************
+ * File Name          : Target/lwipopts.h
+ * Description        : This file overrides LwIP stack default configuration
+ *                      done in opt.h file.
+ ******************************************************************************
+ * @attention
+ *
+ * Copyright (c) 2022 STMicroelectronics.
+ * All rights reserved.
+ *
+ * This software is licensed under terms that can be found in the LICENSE file
+ * in the root directory of this software component.
+ * If no LICENSE file comes with this software, it is provided AS-IS.
+ *
+ ******************************************************************************
+ */
 
 /* Define to prevent recursive inclusion --------------------------------------*/
 #ifndef __LWIPOPTS__H__
@@ -30,11 +29,8 @@
 
 /* Within 'USER CODE' section, code will be kept by default at each generation */
 
-
-
-
 #ifdef __cplusplus
- extern "C" {
+extern "C" {
 #endif
 
 /* STM32CubeMX Specific Parameters (not defined in opt.h) ---------------------*/
@@ -48,17 +44,20 @@
 /* LwIP Stack Parameters (modified compared to initialization value in opt.h) -*/
 /* Parameters set in STM32CubeMX LwIP Configuration GUI -*/
 /*----- Value in opt.h for LWIP_TCP: 1 -----*/
-#define LWIP_TCP 0
+#define LWIP_TCP 1
 /*----- Value in opt.h for NO_SYS: 0 -----*/
 #define NO_SYS 1
 /*----- Default Value for LWIP_TIMERS: 1 ---*/
-#define LWIP_TIMERS 0
+#define LWIP_TIMERS 1
 /*----- Value in opt.h for SYS_LIGHTWEIGHT_PROT: 1 -----*/
 #define SYS_LIGHTWEIGHT_PROT 0
 /*----- Value in opt.h for MEM_ALIGNMENT: 1 -----*/
 #define MEM_ALIGNMENT 4
 /*----- Default Value for MEM_SIZE: 1600 ---*/
-#define MEM_SIZE 2*1024
+#define MEM_SIZE    32 * 1024
+
+#define TCP_MSS     1426
+#define TCP_SND_BUF (4 * TCP_MSS)
 /*----- Value in opt.h for LWIP_ETHERNET: LWIP_ARP || PPPOE_SUPPORT -*/
 #define LWIP_ETHERNET 1
 /*----- Value in opt.h for LWIP_DNS_SECURE: (LWIP_DNS_SECURE_RAND_XID | LWIP_DNS_SECURE_NO_MULTIPLE_OUTSTANDING | LWIP_DNS_SECURE_RAND_SRC_PORT) -*/
@@ -104,9 +103,6 @@
 /*----- Default Value for LWIP_DBG_MIN_LEVEL: LWIP_DBG_LEVEL_ALL ---*/
 #define LWIP_DBG_MIN_LEVEL LWIP_DBG_MASK_LEVEL
 /*-----------------------------------------------------------------------------*/
-
-
-
 
 #ifdef __cplusplus
 }

@@ -45,6 +45,8 @@ void SysTick_Handler(void);
 void TIM6_DAC_IRQHandler(void);
 void ETH_IRQHandler(void);
 
+void tim6_update_callback(void);
+
 #ifdef __cplusplus
 }
 #endif

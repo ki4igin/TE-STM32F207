@@ -22,9 +22,27 @@
 #include "tim.h"
 #include "gpio.h"
 
+#include "udp_c.h"
+#include "tcp_server.h"
+#include "leds.h"
+
 /* Private includes ----------------------------------------------------------*/
 
 /* Private typedef -----------------------------------------------------------*/
+struct pac {
+    const uint32_t id;
+    uint32_t cnt;
+    uint32_t tmp;
+    uint8_t data[60 * 8 * 3 / 4];
+    uint32_t end;
+};
+
+struct pac pac_adc_vibr = {
+    1,
+    0,
+    0,
+    {0},
+    0xFFFFFFFF};
 
 /* Private define ------------------------------------------------------------*/
 
@@ -56,10 +74,43 @@ int main(void)
     MX_LWIP_Init();
     MX_TIM6_Init();
 
+    echo_init();
+
+    // udp_client_connect();
+    // LL_mDelay(1000);
+    // uint8_t test_str[] = "Hello\n";
+    // udp_client_send(test_str, sizeof(test_str));
+    // LL_mDelay(1000);
+    // led_off();
+    // MX_LWIP_Process();
+    // LL_mDelay(1000);
+    LL_TIM_ClearFlag_UPDATE(TIM6);
+    // // LL_TIM_EnableIT_UPDATE(TIM6);
+    LL_TIM_EnableCounter(TIM6);
+
     /* Infinite loop */
 
     while (1) {
+        static uint16_t cnt;
+        if (LL_TIM_IsActiveFlag_UPDATE(TIM6)) {
+            LL_TIM_ClearFlag_UPDATE(TIM6);
+            pac_adc_vibr.cnt++;
+            // udp_client_send(&pac_adc_vibr, sizeof(pac_adc_vibr));
+            tcp_server_send(&pac_adc_vibr, sizeof(pac_adc_vibr));
+        }
+
+        MX_LWIP_Process();
+
+        if (++cnt == 0) {
+        }
     }
+}
+
+void tim6_update_callback(void)
+{
+    pac_adc_vibr.cnt++;
+    udp_client_send(&pac_adc_vibr, sizeof(pac_adc_vibr));
+    // MX_LWIP_Process();
 }
 
 /**

@@ -19,6 +19,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "stm32f2xx_it.h"
+#include "stm32f2xx_ll_tim.h"
 /* Private includes ----------------------------------------------------------*/
 
 /* Private typedef -----------------------------------------------------------*/
@@ -125,6 +126,12 @@ void SysTick_Handler(void)
  */
 void TIM6_DAC_IRQHandler(void)
 {
+    if (LL_TIM_IsActiveFlag_UPDATE(TIM6))
+    {
+        LL_TIM_ClearFlag_UPDATE(TIM6);
+        tim6_update_callback();
+    }
+    
 }
 
 /**

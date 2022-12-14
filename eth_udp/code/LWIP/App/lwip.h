@@ -22,7 +22,7 @@
 #ifndef __mx_lwip_H
 #define __mx_lwip_H
 #ifdef __cplusplus
- extern "C" {
+extern "C" {
 #endif
 
 /* Includes ------------------------------------------------------------------*/
@@ -40,10 +40,6 @@
 #include "lwip/tcpip.h"
 #endif /* WITH_RTOS */
 
-
-
-
-
 /* Global Variables ----------------------------------------------------------*/
 extern ETH_HandleTypeDef heth;
 
@@ -59,7 +55,6 @@ void MX_LWIP_Init(void);
  */
 void MX_LWIP_Process(void);
 
-
 #endif /* WITH_RTOS */
 
 #ifdef __cplusplus
@@ -68,9 +63,9 @@ void MX_LWIP_Process(void);
 #endif /*__ mx_lwip_H */
 
 /**
-  * @}
-  */
+ * @}
+ */
 
 /**
-  * @}
-  */
+ * @}
+ */
