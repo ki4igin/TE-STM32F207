@@ -48,7 +48,6 @@ extern "C" {
 /* Exported macro ------------------------------------------------------------*/
 
 /* Exported functions prototypes ---------------------------------------------*/
-void Error_Handler(void);
 
 /* Private defines -----------------------------------------------------------*/
 #define LED_Pin       LL_GPIO_PIN_9

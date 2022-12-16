@@ -21,21 +21,24 @@
 #include "lwip.h"
 #include "tim.h"
 #include "gpio.h"
+#include "usart.h"
+// #include <stdarg.h>
+#include <assert.h>
 
-#include "udp_c.h"
+// #include "udp_c.h"
 #include "tcp_server.h"
 #include "leds.h"
+#include "periph/debug.h"
 
-/* Private includes ----------------------------------------------------------*/
-
-/* Private typedef -----------------------------------------------------------*/
 struct pac {
     const uint32_t id;
     uint32_t cnt;
     uint32_t tmp;
-    uint8_t data[60 * 8 * 3 / 4];
+    uint8_t data[60 * 8 * 3];
     uint32_t end;
 };
+
+
 
 struct pac pac_adc_vibr = {
     1,
@@ -44,21 +47,9 @@ struct pac pac_adc_vibr = {
     {0},
     0xFFFFFFFF};
 
-/* Private define ------------------------------------------------------------*/
 
-/* Private macro -------------------------------------------------------------*/
-
-/* Private variables ---------------------------------------------------------*/
-
-/* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 
-/* Private user code ---------------------------------------------------------*/
-
-/**
- * @brief  The application entry point.
- * @retval int
- */
 int main(void)
 {
     /* MCU Configuration--------------------------------------------------------*/
@@ -68,11 +59,15 @@ int main(void)
 
     /* Configure the system clock */
     SystemClock_Config();
+    LL_mDelay(10);
 
     /* Initialize all configured peripherals */
     MX_GPIO_Init();
     MX_LWIP_Init();
     MX_TIM6_Init();
+    MX_USART2_Init();
+
+    debug_printf("Hello\n");
 
     echo_init();
 
@@ -98,9 +93,7 @@ int main(void)
             // udp_client_send(&pac_adc_vibr, sizeof(pac_adc_vibr));
             tcp_server_send(&pac_adc_vibr, sizeof(pac_adc_vibr));
         }
-
         MX_LWIP_Process();
-
         if (++cnt == 0) {
         }
     }
@@ -108,9 +101,9 @@ int main(void)
 
 void tim6_update_callback(void)
 {
-    pac_adc_vibr.cnt++;
-    udp_client_send(&pac_adc_vibr, sizeof(pac_adc_vibr));
-    // MX_LWIP_Process();
+    //    pac_adc_vibr.cnt++;
+    //    udp_client_send(&pac_adc_vibr, sizeof(pac_adc_vibr));
+    //    // MX_LWIP_Process();
 }
 
 /**
@@ -145,7 +138,7 @@ void SystemClock_Config(void)
 
     /* Update the time base */
     if (HAL_InitTick(TICK_INT_PRIORITY) != HAL_OK) {
-        Error_Handler();
+        // Error_Handler();
     }
 }
 
@@ -153,13 +146,6 @@ void SystemClock_Config(void)
  * @brief  This function is executed in case of error occurrence.
  * @retval None
  */
-void Error_Handler(void)
-{
-    /* User can add his own implementation to report the HAL error return state */
-    __disable_irq();
-    while (1) {
-    }
-}
 
 #ifdef USE_FULL_ASSERT
 /**

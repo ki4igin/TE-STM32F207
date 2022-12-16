@@ -337,7 +337,7 @@
             <v6Rtti>0</v6Rtti>
             <VariousControls>
               <MiscControls></MiscControls>
-              <Define>STM32F207xx,USE_FULL_LL_DRIVER,USE_HAL_DRIVER</Define>
+              <Define>STM32F207xx,USE_FULL_LL_DRIVER,USE_HAL_DRIVER,DEBUG=1</Define>
               <Undefine></Undefine>
               <IncludePath>..\code\drivers\CMSIS\Include;..\code\LWIP\LwIP\src\include;..\code\periph;..\code\drivers\STM32F2xx_HAL_Driver\Inc;..\code\LWIP\App;..\code\LWIP\Target;..\code;..\code\drivers\CMSIS\Device\ST\STM32F2xx\Include;..\code\LWIP\LwIP\system</IncludePath>
             </VariousControls>
@@ -892,6 +892,21 @@
               <FileName>ethernetif.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\code\LWIP\Target\ethernetif.c</FilePath>
+            </File>
+            <File>
+              <FileName>usart.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\code\periph\usart.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f2xx_ll_usart.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\code\drivers\STM32F2xx_HAL_Driver\Src\stm32f2xx_ll_usart.c</FilePath>
+            </File>
+            <File>
+              <FileName>debug.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\code\periph\debug.c</FilePath>
             </File>
           </Files>
         </Group>

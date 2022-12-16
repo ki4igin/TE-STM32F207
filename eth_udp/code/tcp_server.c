@@ -2,6 +2,7 @@
 
 #include "lwip/tcp.h"
 #include "leds.h"
+#include "periph/debug.h"
 // #include <string.h>
 
 #define TCP_SERVER_PORT 7
@@ -244,7 +245,8 @@ void echo_send(struct tcp_pcb *tpcb, struct echo_state *es)
             /* we are low on memory, try later / harder, defer to poll */
             es->p = ptr;
         } else {
-             led_toggle();
+            debug_printf("err: %d\n", wr_err);
+            // led_toggle();
             /* other problem ?? */
         }
     }
@@ -269,13 +271,19 @@ void tcp_server_send(void *data, uint32_t size)
     struct echo_state *es = es_c;
     struct tcp_pcb *tpcb = pcb_c;
 
-    if ((es->state == ES_ACCEPTED) || (es->state == ES_RECEIVED))
-    {
-        es->p = pbuf_alloc(PBUF_TRANSPORT, size, PBUF_POOL);
-        pbuf_take(es->p, data, size);
-        echo_send(tpcb, es);
-        // tcp_output(tpcb);
-        pbuf_free(es->p);
-    }    
-}
+    if ((es->state == ES_ACCEPTED) || (es->state == ES_RECEIVED)) {
+        err_t err = ERR_OK;
+        es->p = pbuf_alloc(PBUF_TRANSPORT, size, PBUF_RAM);
+        err = pbuf_take(es->p, data, size);
+        if (err != ERR_OK) {
+            debug_printf("err: %d\n", err);
+        }
 
+        echo_send(tpcb, es);
+        tcp_output(tpcb);
+
+        if (es->p != NULL) {
+            pbuf_free(es->p);
+        }
+    }
+}

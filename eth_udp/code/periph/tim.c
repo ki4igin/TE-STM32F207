@@ -32,7 +32,7 @@ void MX_TIM6_Init(void)
     NVIC_SetPriority(TIM6_DAC_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(), 0, 0));
     NVIC_EnableIRQ(TIM6_DAC_IRQn);
 
-    TIM_InitStruct.Prescaler = 5;
+    TIM_InitStruct.Prescaler = 2;
     TIM_InitStruct.CounterMode = LL_TIM_COUNTERMODE_UP;
     TIM_InitStruct.Autoreload = (65536) - 1;
     LL_TIM_Init(TIM6, &TIM_InitStruct);
