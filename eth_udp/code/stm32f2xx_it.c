@@ -20,6 +20,8 @@
 #include "main.h"
 #include "stm32f2xx_it.h"
 #include "stm32f2xx_ll_tim.h"
+#include "stm32f2xx_hal_pcd.h"
+
 /* Private includes ----------------------------------------------------------*/
 
 /* Private typedef -----------------------------------------------------------*/
@@ -36,6 +38,7 @@
 
 /* External variables --------------------------------------------------------*/
 extern ETH_HandleTypeDef heth;
+extern PCD_HandleTypeDef hpcd_USB_OTG_FS;
 
 /******************************************************************************/
 /*           Cortex-M3 Processor Interruption and Exception Handlers          */
@@ -140,4 +143,18 @@ void TIM6_DAC_IRQHandler(void)
 void ETH_IRQHandler(void)
 {
     HAL_ETH_IRQHandler(&heth);
+}
+
+/**
+  * @brief This function handles USB On The Go FS global interrupt.
+  */
+void OTG_FS_IRQHandler(void)
+{
+  /* USER CODE BEGIN OTG_FS_IRQn 0 */
+
+  /* USER CODE END OTG_FS_IRQn 0 */
+  HAL_PCD_IRQHandler(&hpcd_USB_OTG_FS);
+  /* USER CODE BEGIN OTG_FS_IRQn 1 */
+
+  /* USER CODE END OTG_FS_IRQn 1 */
 }

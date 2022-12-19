@@ -3,6 +3,8 @@
 
 #include "stdint.h"
 
+// #define Error_Handler error_handler
+
 #define error_handler() _error_handler(__FILE__, __LINE__)
 
 void debug_printf(const char *fmt, ...);

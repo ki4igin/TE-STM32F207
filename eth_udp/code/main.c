@@ -22,6 +22,7 @@
 #include "tim.h"
 #include "gpio.h"
 #include "usart.h"
+#include "usb_device.h"
 // #include <stdarg.h>
 #include <assert.h>
 
@@ -34,11 +35,9 @@ struct pac {
     const uint32_t id;
     uint32_t cnt;
     uint32_t tmp;
-    uint8_t data[60 * 8 * 3];
+    uint8_t data[30 * 8 * 3];
     uint32_t end;
 };
-
-
 
 struct pac pac_adc_vibr = {
     1,
@@ -46,7 +45,6 @@ struct pac pac_adc_vibr = {
     0,
     {0},
     0xFFFFFFFF};
-
 
 void SystemClock_Config(void);
 
@@ -66,13 +64,15 @@ int main(void)
     MX_LWIP_Init();
     MX_TIM6_Init();
     MX_USART2_Init();
+    MX_USB_DEVICE_Init();
 
+    // Задержка для инициализации usb com
+    LL_mDelay(2000);
     debug_printf("Hello\n");
 
     echo_init();
 
     // udp_client_connect();
-    // LL_mDelay(1000);
     // uint8_t test_str[] = "Hello\n";
     // udp_client_send(test_str, sizeof(test_str));
     // LL_mDelay(1000);
@@ -121,6 +121,7 @@ void SystemClock_Config(void)
     while (LL_RCC_HSE_IsReady() != 1) {
     }
     LL_RCC_PLL_ConfigDomain_SYS(LL_RCC_PLLSOURCE_HSE, LL_RCC_PLLM_DIV_20, 192, LL_RCC_PLLP_DIV_2);
+    LL_RCC_PLL_ConfigDomain_48M(LL_RCC_PLLSOURCE_HSE, LL_RCC_PLLM_DIV_20, 192, LL_RCC_PLLQ_DIV_5);
     LL_RCC_PLL_Enable();
 
     /* Wait till PLL is ready */
@@ -138,7 +139,7 @@ void SystemClock_Config(void)
 
     /* Update the time base */
     if (HAL_InitTick(TICK_INT_PRIORITY) != HAL_OK) {
-        // Error_Handler();
+        Error_Handler();
     }
 }
 
@@ -146,6 +147,12 @@ void SystemClock_Config(void)
  * @brief  This function is executed in case of error occurrence.
  * @retval None
  */
+
+void Error_Handler(void)
+{
+    error_handler();
+}
+
 
 #ifdef USE_FULL_ASSERT
 /**

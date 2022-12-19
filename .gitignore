@@ -1,3 +1,5 @@
 /*
 !/.gitignore
 !/eth_udp
+!/eth
+!/usb_cdc

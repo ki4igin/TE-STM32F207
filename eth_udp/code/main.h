@@ -38,6 +38,7 @@ extern "C" {
 #include "stm32f2xx_ll_dma.h"
 #include "stm32f2xx_ll_tim.h"
 #include "stm32f2xx_ll_gpio.h"
+#include "periph/debug.h"
 
 /* Private includes ----------------------------------------------------------*/
 
@@ -48,7 +49,7 @@ extern "C" {
 /* Exported macro ------------------------------------------------------------*/
 
 /* Exported functions prototypes ---------------------------------------------*/
-
+void Error_Handler(void);
 /* Private defines -----------------------------------------------------------*/
 #define LED_Pin       LL_GPIO_PIN_9
 #define LED_GPIO_Port GPIOB
