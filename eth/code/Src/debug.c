@@ -8,8 +8,8 @@
 #include <string.h>
 #include "usbd_cdc_if.h"
 
-// #define USE_UART
-#define USE_USB
+#define USE_UART
+// #define USE_USB
 
 #define DEBUG_UART     USART2
 #define DEBUG_BUF_SIZE 100
@@ -25,7 +25,7 @@ void debug_printf(const char *fmt, ...)
 
     uint32_t len = vsprintf(debug_buf, fmt, argp);
 #ifdef USE_UART
-    uart_send_str(DEBUG_UART, (uint8_t *)debug_buf);
+    uart_send_array(DEBUG_UART, (uint8_t *)debug_buf, len);
 #endif
 #ifdef USE_USB
     CDC_Transmit_FS((uint8_t *)debug_buf, len);

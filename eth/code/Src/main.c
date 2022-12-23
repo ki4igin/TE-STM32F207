@@ -23,20 +23,14 @@
 #include "usart.h"
 #include "usb_device.h"
 #include "gpio.h"
+#include "tim.h"
+#include "stm32f2xx_ll_tim.h"
 
 #include "debug.h"
+#include "udp_server.h"
 
-/* Private includes ----------------------------------------------------------*/
+uint8_t test_data[256];
 
-/* Private typedef -----------------------------------------------------------*/
-
-/* Private define ------------------------------------------------------------*/
-
-/* Private macro -------------------------------------------------------------*/
-
-/* Private variables ---------------------------------------------------------*/
-
-/* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
@@ -61,15 +55,29 @@ int main(void)
     MX_CRC_Init();
     MX_USART2_UART_Init();
     MX_LWIP_Init();
+    MX_TIM6_Init();
+
+    for (uint32_t i = 0; i < 256; i++) {
+        test_data[i] = i;
+    }
+    *(uint32_t *)test_data = 1;
 
     debug_timer_init();
+    udp_server_init();
 
     LL_mDelay(2000);
     debug_printf("Hello\n");
+    LL_TIM_EnableCounter(TIM6);
 
     /* Infinite loop */
     uint32_t cnt = 0;
     while (1) {
+        if (LL_TIM_IsActiveFlag_UPDATE(TIM6)) {
+            *(uint32_t *)&test_data[4] = cnt++;
+            LL_TIM_ClearFlag_UPDATE(TIM6);
+            udp_server_send(test_data, 256);
+        }
+
         MX_LWIP_Process();
     }
 }
